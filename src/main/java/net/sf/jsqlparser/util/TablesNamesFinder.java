@@ -369,12 +369,16 @@ public class TablesNamesFinder implements SelectVisitor, FromItemVisitor, Expres
         overlapsCondition.getRight().accept(this);
     }
 
-    @Override
     public void visit(Column tableColumn) {
-        if (allowColumnProcessing && tableColumn.getTable() != null
-                && tableColumn.getTable().getName() != null) {
+        if (shouldProcessColumn(tableColumn)) {
             visit(tableColumn.getTable());
         }
+    }
+
+    private boolean shouldProcessColumn(Column tableColumn) {
+        return allowColumnProcessing
+                && tableColumn.getTable() != null
+                && tableColumn.getTable().getName() != null;
     }
 
     @Override
